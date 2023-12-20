@@ -41,7 +41,7 @@ class LocationController extends Controller
             'name' => $request->input('name'),
             'latitude' => $request->input('latitude'),
             'longitude' => $request->input('longitude'),
-            'marker_color' => $request->input('marker_color')
+            'marker_color' => substr($request->input('marker_color'),1)
         ];
 
 
