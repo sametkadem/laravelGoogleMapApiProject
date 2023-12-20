@@ -25,7 +25,7 @@ class LocationController extends Controller
             'name' => 'required',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'marker_color' => 'required|size:6',
+            'marker_color' => 'required|size:7|regex:/^#[a-fA-F0-9]{6}$/',
         ], [
             'name.required' => 'Konum adı zorunludur.',
             'latitude.required' => 'Enlem zorunludur.',
@@ -59,12 +59,11 @@ class LocationController extends Controller
 
     public function updateById(Request $request){
         $locationModel = new LocationModel();
-         
         $request->validate([
             'name' => 'required',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'marker_color' => 'required|size:6',
+            'marker_color' => 'required|size:7|regex:/^#[a-fA-F0-9]{6}$/',
         ], [
             'name.required' => 'Konum adı zorunludur.',
             'latitude.required' => 'Enlem zorunludur.',
@@ -74,7 +73,7 @@ class LocationController extends Controller
             'longitude.numeric' => 'Boylam numerik bir değer olmalıdır.',
             'marker_color.size' => 'Marker rengi 6 karakter olmalıdır.',
         ]);
-        
+    
         $data = [
             'id'            => $request->input('id'),
             'name'          => $request->input('name'),
