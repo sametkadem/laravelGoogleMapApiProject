@@ -1,16 +1,21 @@
-<form action="/process-form" method="post">
-    @csrf
-    <label for="x">Enlem Bilgisi:</label>
-    <input type="text" name="x" id="x" required>
+<!-- resources/views/layouts/app.blade.php -->
 
-    <label for="y">Boylam Bilgisi:</label>
-    <input type="text" name="y" id="y" required>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <!-- Diğer head içeriği -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        @include('navbar') <!-- Navbar'ı burada çağırıyoruz -->
 
-    <label for="color">Renk:</label>
-    <input type="color" name="color" id="color" required>
+        <main class="py-4">
+            @yield('content')
+        </main>
+    </div>
 
-    <label for="color">Konumun Adı:</label>
-    <input type="text" name="name" id="name" required>
-
-    <button type="submit">Gönder</button>
-</form>
+    <!-- Bootstrap JS ve Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
