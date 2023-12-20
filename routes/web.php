@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('test', '\App\Http\Controllers\GeneralController@test');
+Route::get('', '\App\Http\Controllers\LocationController@create');
 
 Route::get('/form', [FormController::class, 'showForm']);
 Route::post('/process-form', [FormController::class, 'processForm']);
@@ -27,5 +27,10 @@ Route::get('/settings', '\App\Http\Controllers\SettingsController@showForm')->na
 Route::put('/settings/{id}', '\App\Http\Controllers\SettingsController@update')->name('settings.update');
 
 
-Route::get('/location/create', '\App\Http\Controllers\LocationController@create')->name('location.create');
+Route::get('/location', '\App\Http\Controllers\LocationController@create')->name('location.create');
 Route::post('/location/store', '\App\Http\Controllers\LocationController@store')->name('location.store');
+
+Route::get('/location/detail/{id}', '\App\Http\Controllers\LocationController@editByID')->name('location.edit');
+Route::post('/location/detail/update', '\App\Http\Controllers\LocationController@updateById')->name('location.updateById');
+
+Route::get('/location/map/show/{id}', '\App\Http\Controllers\LocationController@showMapById')->name('location.showById');

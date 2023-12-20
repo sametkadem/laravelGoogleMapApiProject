@@ -30,5 +30,17 @@ class LocationModel extends Model
         return $data;
     }
 
+    public function getMyLocationById($id){
+        $data = DB::table('location')->where('id', $id)->first();
+        return $data;
+    }
+
+    public function updateMyLocationById($data){
+        $data = DB::table('location')
+            ->where('id', $data['id'])
+            ->update($data);
+        return $data;
+    }
+
 
 }
