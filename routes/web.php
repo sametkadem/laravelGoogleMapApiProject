@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FormController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,3 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('test', '\App\Http\Controllers\GeneralController@test');
+
+Route::get('/form', [FormController::class, 'showForm']);
+Route::post('/process-form', [FormController::class, 'processForm']);

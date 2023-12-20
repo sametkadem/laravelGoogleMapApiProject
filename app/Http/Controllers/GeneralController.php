@@ -18,10 +18,6 @@ use Carbon\Carbon;
 class GeneralController extends Controller
 {   
 
-    public function test(){
-        return view('geomap');
-    }
-
     public function getToken(){
         return response()->json([
             'token' => 'AIzaSyBlqkmnL0eQb0ZJIeoFW1NFqTa9AMoabEA'
