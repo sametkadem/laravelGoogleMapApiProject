@@ -6,7 +6,7 @@
     <!-- Diğer head içeriği -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <head>
-    <title>Google Maps Example</title>
+    <title>Maps</title>
     <script src="https://maps.googleapis.com/maps/api/js?key="{{ $google_api_key }}"&callback=initMap" async defer></script>
     <script>
         function initMap() {

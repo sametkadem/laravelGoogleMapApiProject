@@ -32,5 +32,10 @@ Route::post('/location/store', '\App\Http\Controllers\LocationController@store')
 
 Route::get('/location/detail/{id}', '\App\Http\Controllers\LocationController@editByID')->name('location.edit');
 Route::post('/location/detail/update', '\App\Http\Controllers\LocationController@updateById')->name('location.updateById');
+Route::get('/location/detail/delete/{id}', '\App\Http\Controllers\LocationController@deleteById')->name('location.deleteById');
+
 
 Route::get('/location/map/show/{id}', '\App\Http\Controllers\LocationController@showMapById')->name('location.showById');
+Route::post('/location/map/show/distance', '\App\Http\Controllers\LocationController@showDistanceMayByIds')->name('location.distance');
+Route::post('/location/map/show/all', '\App\Http\Controllers\LocationController@showMapAll')->name('location.showMapAll');
+

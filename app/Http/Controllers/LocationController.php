@@ -10,15 +10,17 @@ class LocationController extends Controller
     public function create()
     {
         $locationModel = new LocationModel();
+        $settingsModel = new SettingsModel();
+
         $locations = $locationModel->getMyLocation();
-        $locations = ['locations' => $locations];
+        $locations = ['locations' => $locations, 'google_api_key' => $settingsModel->getMySettingsData()->google_api_key];
         return view('location', $locations);
     }
 
     public function store(Request $request)
     {
         $locationModel = new LocationModel();
-        /*
+        
         $request->validate([
             'name' => 'required',
             'latitude' => 'required|numeric',
@@ -33,7 +35,7 @@ class LocationController extends Controller
             'longitude.numeric' => 'Boylam numerik bir değer olmalıdır.',
             'marker_color.size' => 'Marker rengi 6 karakter olmalıdır.',
         ]);
-        */
+        
 
         $data = [
             'name' => $request->input('name'),
@@ -57,7 +59,7 @@ class LocationController extends Controller
 
     public function updateById(Request $request){
         $locationModel = new LocationModel();
-         /*
+         
         $request->validate([
             'name' => 'required',
             'latitude' => 'required|numeric',
@@ -72,7 +74,7 @@ class LocationController extends Controller
             'longitude.numeric' => 'Boylam numerik bir değer olmalıdır.',
             'marker_color.size' => 'Marker rengi 6 karakter olmalıdır.',
         ]);
-        */
+        
         $data = [
             'id'            => $request->input('id'),
             'name'          => $request->input('name'),
@@ -92,4 +94,28 @@ class LocationController extends Controller
         $location = ['location' => $location, 'google_api_key' => $settingsModel->getMySettingsData()->google_api_key];
         return view('location_map', $location); 
     }
+
+    public function showDistanceMayByIds(Request $request){
+        $locationModel = new LocationModel();
+        $settingsModel = new SettingsModel();
+
+        $selectedLocations = $request->input('selectedLocations');
+        if($selectedLocations == null){
+            return redirect()->route('location.create')->with('error', 'Lütfen 2 konum seçiniz.');
+        }
+        if(count($selectedLocations) != 2){
+            return redirect()->route('location.create')->with('error', 'Lütfen 2 konum seçiniz.');
+        }
+        $locations = $locationModel->getMyLocationByIds($selectedLocations);
+        $locations = ['locations' => $locations, 'google_api_key' => $settingsModel->getMySettingsData()->google_api_key];
+        return view('location_distance', $locations); 
+    }
+
+    public function deleteById($id){
+        $locationModel = new LocationModel();
+        $locationModel->deleteMyLocationById($id);
+        return redirect()->route('location.create')->with('success', 'Konum başarıyla silindi.');
+    }
+
+   
 }
