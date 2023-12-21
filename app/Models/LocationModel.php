@@ -1,58 +1,56 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-use DB;
-use App\Libraries\ColumnClassificationLibrary;
-use Event;
 
+use Illuminate\Database\Eloquent\Model;
 
 class LocationModel extends Model
 {   
-    
 
-    public function createLocation($data){
+    protected $table = 'location';
+    protected $fillable = ['name', 'latitude', 'longitude', 'marker_color'];
 
-       $exists = DB::table('location')
-            ->where('name', $data['name'])->exists();
-        if($exists){
-            $update = DB::table('location')->where('name', $data['name'])->update($data);
-            return $update;
-        }
-        else{
-            $insert = DB::table('location')->insert($data);
-            return $insert;
-        }
+    public function createOrUpdateLocation($data)
+    {
+        return $this->updateOrCreate(
+            ['id' => $data['id']],
+            [
+                'name' => $data['name'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'marker_color' => substr($data['marker_color'], 1),
+            ]
+        );
     }
 
-    public function getMyLocation(){
-        $data = DB::table('location')->get();
-        return $data;
+    public function getMyLocation()
+    {
+        return $this->all();
     }
 
-    public function getMyLocationById($id){
-        $data = DB::table('location')->where('id', $id)->first();
-        return $data;
+    public function getMyLocationById($id)
+    {
+        return $this->find($id);
     }
 
-    public function getMyLocationByIds($ids){
-        $data = DB::table('location')->whereIn('id', $ids)->get();
-        return $data;
+    public function getMyLocationByIds($ids)
+    {
+        return $this->whereIn('id', $ids)->get();
     }
 
-    public function updateMyLocationById($data){
-        $data = DB::table('location')
-            ->where('id', $data['id'])
-            ->update($data);
-        return $data;
+    public function updateMyLocationById($data)
+    {
+        return $this->where('id', $data['id'])->update([
+            'name' => $data['name'],
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+            'marker_color' => substr($data['marker_color'], 1),
+        ]);
     }
 
-    public function deleteMyLocationById($id){
-        $data = DB::table('location')
-            ->where('id', $id)
-            ->delete();
-        return $data;
+    public function deleteMyLocationById($id)
+    {
+        return $this->destroy($id);
     }
-
 
 }

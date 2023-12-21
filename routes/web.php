@@ -1,41 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\FormController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SettingsController;
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('', [LocationController::class, 'create']);
+
+Route::get('/settings', [SettingsController::class, 'showForm'])->name('settings');
+Route::put('/settings/{id}', [SettingsController::class, 'update'])->name('settings.update');
+
+Route::get('/location/map/show/{id}', [LocationController::class, 'showMapById'])->name('location.showById');
+Route::post('/location/map/show/distance', [LocationController::class, 'showDistanceMayByIds'])->name('location.distance');
+Route::post('/location/map/show/all', [LocationController::class, 'showMapAll'])->name('location.showMapAll');
+
+Route::prefix('/location')->group(function () {
+    Route::get('', [LocationController::class, 'create'])->name('location.create');
+    Route::post('/store', [LocationController::class, 'storeOrUpdate'])->name('location.store');
+    Route::get('/detail/{id}', [LocationController::class, 'editByID'])->name('location.edit');
+    Route::post('/detail/update', [LocationController::class, 'storeOrUpdate'])->name('location.updateById');
+    Route::get('/detail/delete/{id}', [LocationController::class, 'deleteById'])->name('location.deleteById');
 });
 
-Route::get('', '\App\Http\Controllers\LocationController@create');
 
-Route::get('/form', [FormController::class, 'showForm']);
-Route::post('/process-form', [FormController::class, 'processForm']);
-
-Route::get('/settings', '\App\Http\Controllers\SettingsController@showForm')->name('settings');
-Route::put('/settings/{id}', '\App\Http\Controllers\SettingsController@update')->name('settings.update');
-
-
-Route::get('/location', '\App\Http\Controllers\LocationController@create')->name('location.create');
-Route::post('/location/store', '\App\Http\Controllers\LocationController@store')->name('location.store');
-
-Route::get('/location/detail/{id}', '\App\Http\Controllers\LocationController@editByID')->name('location.edit');
-Route::post('/location/detail/update', '\App\Http\Controllers\LocationController@updateById')->name('location.updateById');
-Route::get('/location/detail/delete/{id}', '\App\Http\Controllers\LocationController@deleteById')->name('location.deleteById');
-
-
-Route::get('/location/map/show/{id}', '\App\Http\Controllers\LocationController@showMapById')->name('location.showById');
-Route::post('/location/map/show/distance', '\App\Http\Controllers\LocationController@showDistanceMayByIds')->name('location.distance');
-Route::post('/location/map/show/all', '\App\Http\Controllers\LocationController@showMapAll')->name('location.showMapAll');
 

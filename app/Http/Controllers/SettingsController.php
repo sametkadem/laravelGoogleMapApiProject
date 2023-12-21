@@ -2,46 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use GeneralControllerImportTrait;
-use DB;
-
 use Illuminate\Http\Request;
-
-
-use App\Libraries\ColumnClassificationLibrary;
-use Event;
-use DateTime;
-use Carbon\Carbon;
-
 use App\Models\SettingsModel;
 
-
 class SettingsController extends Controller
-{   
+{
+    private $settingsModel;
+
+    public function __construct(SettingsModel $settingsModel)
+    {
+        $this->settingsModel = $settingsModel;
+    }
+
     public function showForm()
     {
-        $settingsModel = new SettingsModel();
-        $settingsData = ['settingsData' => $settingsModel->getMySettingsData()];
-        $dataArray = json_decode(json_encode($settingsData), true);
-        if($dataArray['settingsData'] == null){
-           $settingsData = ['settingsData' => (object) ['id' => 0, 'google_api_key' => '']];
+        try {
+            $settingsData = $this->settingsModel->getMySettingsData() ?? (object)['id' => 0, 'google_api_key' => ''];
+            return view('settings', compact('settingsData'));
+        } catch (\Exception $e) {
+            return redirect()->route('settings')->with('error', 'Bir hata oluştu: ' . $e->getMessage());
         }
-        return view('settings', $settingsData);
     }
 
     public function update(Request $request, $id)
     {
-        $settingsModel = new SettingsModel();
-        $api_key = $request->input('api_key');
-        $update = $settingsModel->updateSettings($id, $api_key);
-        return redirect()->route('settings')->with('success', 'Veri güncellendi!');
+        try {
+            $api_key = $request->input('api_key');
+            $update = $this->settingsModel->updateSettings($id, $api_key);
+            return redirect()->route('settings')->with('success', 'Veri güncellendi!');
+        } catch (\Exception $e) {
+            return redirect()->route('settings')->with('error', 'Bir hata oluştu: ' . $e->getMessage());
+        }
     }
 
-    public function getMyGoogleApiKey(){
-        $settingsModel = new SettingsModel();
-        $settingsData = $settingsModel->getMySettingsData();
-        return $settingsData->google_api_key;
+    public function getMyGoogleApiKey()
+    {
+        try {
+            $settingsData = $this->settingsModel->getMySettingsData();
+            return $settingsData->google_api_key;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
-    
-
 }

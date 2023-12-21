@@ -1,33 +1,31 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-use DB;
-use App\Libraries\ColumnClassificationLibrary;
-use Event;
 
+use Illuminate\Database\Eloquent\Model;
 
 class SettingsModel extends Model
-{   
-    public function getMySettingsData(){
-        $data = DB::table('settings')->first();
-        return $data;
+{
+    protected $table = 'settings';
+    protected $fillable = ['google_api_key'];
+
+    public function getMySettingsData()
+    {
+        return $this->first();
     }
 
-    public function updateSettings($id , $api_key){
-        $data = [
-            'google_api_key' => $api_key
-        ];
-        $control = DB::table('settings')->where('id', $id)->exists($data);
+    public function updateSettings($id, $api_key)
+    {
+        $data = ['google_api_key' => $api_key];
 
-        if($control){
-            $update = DB::table('settings')->where('id', $id)->update($data);
+        $existingRecord = $this->find($id);
+
+        if ($existingRecord) {
+            $existingRecord->update($data);
+        } else {
+            $this->create($data);
         }
-        else{
-            $update = DB::table('settings')->insert($data);
-        }
-        return $update;
+
+        return true; 
     }
-
-
 }
